@@ -1,0 +1,23 @@
+{
+  "name": "yeepay",
+  "description": "yeepay api",
+  "author": {
+    "name": "navy"
+  },
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/navyxie/yeepay.git"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "node-rsa": "^0.2.22",
+    "underscore": "^1.7.0"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/navyxie/yeepay.git"
+}
