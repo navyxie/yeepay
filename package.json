@@ -1,23 +1,18 @@
 {
-  "name": "yeepay",
-  "description": "yeepay api",
-  "author": {
-    "name": "navy"
-  },
+  "name": "yeepayapp",
+  "description": "yeepay app",
+  "author": "navy",
   "version": "0.0.1",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/navyxie/yeepay.git"
+  "dependencies": {
+    "encoding": "^0.1.11",
+    "express": "3.0.3",
+    "node-constants": "0.0.2",
+    "ursa": "^0.8.4",
+    "utf8": "^2.1.0"
   },
   "main": "index.js",
-  "dependencies": {
-    "node-rsa": "^0.2.22",
-    "underscore": "^1.7.0"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {
-    "mocha": "*",
-    "should": "*"
-  },
-  "readmeFilename": "README.md",
-  "homepage": "https://github.com/navyxie/yeepay.git"
+  "license": "ISC"
 }
