@@ -32,10 +32,10 @@ app.get('/yp_finish',function(req,res){
 	var encryptkey = query.encryptkey;	
 	var data = query.data;
 	var parseData = payInstance.parseReturn(data,encryptkey);
-	if(data.code == 0){
+	if(parseData.code == 0){
 		res.send('恭喜，成功购买考拉理财产品。<br />'+JSON.stringify(parseData));
 	}else{
-		res.send(data.msg);
+		res.send(parseData.msg);
 	}
 });
 app.post('/yp_callback',function(req,res){
