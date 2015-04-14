@@ -1,15 +1,25 @@
 {
   "name": "yeepay",
-  "description": "yeepay api",
-  "author": {
-    "name": "navy"
-  },
   "version": "0.0.1",
+  "description": "yeepay ",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/navyxie/yeepay.git"
+    "url": "https://github.com/navyxie/yeepay"
   },
-  "main": "index.js",
+  "keywords": [
+    "yeepay",
+    "api"
+  ],
+  "author": "navyxie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/navyxie/yeepay/issues"
+  },
+  "homepage": "https://github.com/navyxie/yeepay",
   "dependencies": {
     "base64": "^2.1.0",
     "encoding": "^0.1.11",
@@ -24,6 +34,5 @@
     "underscore": "^1.7.0",
     "request":"^2.55.0"
   },
-  "readmeFilename": "README.md",
-  "homepage": "https://github.com/navyxie/yeepay.git"
+  "readmeFilename": "README.md"
 }
