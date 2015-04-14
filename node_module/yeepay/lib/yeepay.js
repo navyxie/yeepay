@@ -1,12 +1,12 @@
 var config = require('./config');
 var _ = require('underscore');
-var NodeRSA = require('node-rsa');
 var ursa = require('ursa');
 var yeepayCrypto = require('./crypto'); 
 var utf8 = require('utf8');
 var crypto = require('crypto');
 var encoding = require('encoding');
-var constants = require('node-constants');
+var base64 = require('base64');
+var JSONbig = require('json-bigint');
 function isNotEmptyObj(val){
 	return _.isObject(val) && !_.isEmpty(val)
 }
@@ -239,6 +239,73 @@ yeePay.prototype.getEncryptkey = function(){
 	}
   	var crt = ursa.createPublicKey(yeepayCrypto.getRSAPublicKey(this.yeepayPublicKey));
   	return crt.encrypt(this.AESKey, 'utf8', 'base64',ursa.RSA_PKCS1_PADDING);
+}
+/**
+  通过RSA，解密 易宝支付成功后返回的encryptkey
+* @param string key
+* @return string
+*/
+yeePay.prototype.decryptKey = function(key){
+	key = decodeURIComponent(key);
+	key = base64.decode(key);//易宝要求必须进行base64解码才能得到正确的解密 eas key
+	var pem = ursa.createPrivateKey(yeepayCrypto.getRSAPrivateKey(this.merchantPrivateKey));
+	return pem.decrypt(key, 'binary', 'utf8', ursa.RSA_PKCS1_PADDING);
+}
+/**
+  通过RSA，解密 易宝支付成功后返回的encryptkey
+* @param string key
+* @return string
+*/
+yeePay.prototype.deEAS = function(data,key){
+	data = decodeURIComponent(data);
+	data = base64.decode(data);
+	return yeepayCrypto.deEAS(data,key);
+}
+/**
+  解析易宝返回的数据
+* @param string data
+  @param string encryptkey
+* @return object
+*/
+yeePay.prototype.parseReturn = function(data,encryptkey){
+	var easKey = this.decryptKey(encryptkey);
+	var jsonStr = this.deEAS(data,easKey);
+	try{
+		var json = JSONbig.parse(jsonStr);
+		json.yborderid = json.yborderid.toString();//tostring
+		if(!json.sign){
+			if(json.error_code){
+				return {code:-1,msg:'error_code:'+json.error_code+',error_msg:'+json.error_msg}
+			}else{
+				return {code:-2,msg:"请求yeepay返回异常"}
+			}
+		}else{
+			if(!this.RSAVerify(json,json.sign)){
+				return {code:-3,msg:'请求返回签名验证失败'}
+			}
+		}
+		if(json.error_code && !json.status){
+			return {code:-4,msg:'error_code:'+json.error_code+',error_msg:'+json.error_msg}
+		}
+		delete json.sign;
+		return {code:0,msg:'success',data:json};
+	}catch(err){
+		return {code:-5,msg:err}
+	}
+}
+/**
+  验证易宝返回的签名
+* @param object data
+  @param string sign
+* @return boolean
+*/
+yeePay.prototype.RSAVerify = function(json,sign){
+	delete json.sign;
+	json = sortObjectByKey(json);
+	var values = _.values(json);
+	var valStr = values.join('');
+	valStr = utf8.encode(valStr);//中文字符使用UTF-8编码,see:http://mobiletest.yeepay.com/file/doc/pubshow?doc_id=19#hm_6, keyword:RSA验签
+	return yeepayCrypto.RSAVerify(valStr,sign,yeepayCrypto.getRSAPublicKey(this.yeepayPublicKey));
 }
 /**
 * 生成一个随机的字符串作为AES密钥

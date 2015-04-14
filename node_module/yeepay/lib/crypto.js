@@ -119,14 +119,36 @@ function enEAS(data,key){
  * @return string
  */
 function deEAS(data,key){
-	return decrypt(data,key,'aes-128-ecb','utf8','base64','');
+	return decrypt(data,key,'aes-128-ecb','utf8','binary','');
 }
+/**
+ * 获取rsa签名
+ * 
+ * @param string dataStr
+ * @param string merchantPrivateKey
+ * @param string algorithm
+ * @return string
+*/
 function getRSASign(dataStr,merchantPrivateKey,algorithm){
 	algorithm = algorithm || "RSA-SHA1";
 	var RSA = crypto.createSign(algorithm);
 	var pem = getRSAPrivateKey(merchantPrivateKey);
 	RSA.update(dataStr);	
 	return RSA.sign(pem,'base64');
+}
+/**
+ * 签名认证
+ * 
+ * @param string signData
+ * @param string sign
+ * @param string yibaoPublickKey
+ * @return boolean
+*/
+function RSAVerify(signData,sign,yibaoPublickKey,algorithm){
+	algorithm = algorithm || "RSA-SHA1";
+	var verifier = crypto.createVerify(algorithm);
+	verifier.update(signData);
+	return verifier.verify(yibaoPublickKey,sign,"base64");
 }
 module.exports = {
 	encrypt:encrypt,
@@ -135,5 +157,6 @@ module.exports = {
 	deEAS:deEAS,
 	getRSASign:getRSASign,
 	getRSAPrivateKey:getRSAPrivateKey,
-	getRSAPublicKey:getRSAPublicKey
+	getRSAPublicKey:getRSAPublicKey,
+	RSAVerify:RSAVerify
 }
