@@ -2,6 +2,8 @@ yeepay-易宝支付 SDK
 
 =======
 
+### 新增订单查询接口，绑卡查询接口
+
 ###  use case
 
 		var express = require('express');
@@ -56,3 +58,68 @@ yeepay-易宝支付 SDK
 		});
 		app.listen(port);
 		console.log('app listen on '+port);
+		//订单查询接口
+		payInstance.queryOrder({
+			orderid:"订单id"
+		},function(err,data){
+			//交易记录查询
+			data =>{
+				code: 0,
+				msg: 'success',
+				data:{
+					amount: 700,
+					bank: "农业银行",
+					bankcardtype: 1,
+					bankcode: "ABC",
+					cardno: "622************9577",
+					closetime: 1433372844,
+					currency: 156,
+					merchantaccount: "***",
+					orderid: "1234567700244123373146",
+					ordertime: 1433372758,
+					productcatalog: 30,
+					productdesc: "考拉理财,开启懒人理财生活。",
+					productname: "考拉理财",
+					refundtotal: 0,
+					sourceamount: 700,
+					sourcefee: 0,
+					status: 1,//0:待付,1:已付,2:已撤销,3:阻断交易.交易成功以判断status为1为准
+					targetamount: 700,
+					targetfee: 0,
+					type: 1,
+					yborderid: "411305307333878533"
+				}
+			}
+		});
+		//绑卡查询接口
+		payInstance.authBind({
+			'identityid':'**'
+		},function(err,body){
+			if(err){
+				console.log(err);
+			}else{
+				data=>{ 
+					code: 0,
+					msg: 'success',
+					data: 
+					{ 
+						cardlist: [
+							{
+								"bankcode":"",
+								"bindid":"",
+								"bindvalidthru":,
+								"card_last":"",
+								"card_name":"",
+								"card_top":"",
+								"merchantaccount":"",
+								"phone":""
+							}
+						],
+						identityid: '***',
+						identitytype: 2,
+						merchantaccount: '***' 
+					} 
+				}
+			}
+		});
+		
