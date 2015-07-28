@@ -8,6 +8,8 @@
 
 [authBind](#authBind)
 
+[bankcardCheck](#bankcardCheck)
+
 <a name="webPay" />
 
 创建订单，异步回调数据解析以及同步回调数据解析
@@ -141,4 +143,30 @@ payInstance.authBind({
 		}
 	}
 });
-```		
+```	
+
+<a name="bankcardCheck" />
+
+检查是否为有效的银行卡	
+
+```js
+//商户交互页面,让用户输入卡信息后,先调用本接口检查是否为有效的银行卡(但并不代表是投资通
+支持的银行卡,投资通支持的银行卡请见附录),然后再进行支付请求,以提高支付成功率。
+payInstance.bankcardCheck('6227003300000000000',function(err,body){
+	var parseData = payInstance.parseCommon(body.data,body.encryptkey);
+	//parseData = > 
+	// {
+	// 	code: 0,
+	// 	msg: "success",
+	// 	data: {
+	// 		bankcode: "CCB",
+	// 		bankname: "建设银行",
+	// 		cardno: "6227003320240037533",
+	// 		cardtype: 1,//1:储蓄卡,2:信用卡,-1 未知银行卡
+	// 		isvalid: 1,//0:无效卡号,1:有效的银行卡号
+	// 		merchantaccount: "***"
+	// 	}
+	// }
+	res.json(200,parseData);
+})
+```
