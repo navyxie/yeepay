@@ -6,9 +6,21 @@
 
 [queryOrder](#queryOrder)
 
+[withdraw](#withdraw)
+
+[drawRecord](#drawRecord)
+
 [authBind](#authBind)
 
 [bankcardCheck](#bankcardCheck)
+
+[invokebindbankcard](#invokebindbankcard)
+
+[confirmbindbankcard](#confirmbindbankcard)
+
+[unbindbankcard](#unbindbankcard)
+
+[drawvalidamount](#drawvalidamount)
 
 <a name="webPay" />
 
@@ -102,10 +114,50 @@ payInstance.queryOrder({
 			targetamount: 700,
 			targetfee: 0,
 			type: 1,
-			yborderid: "411305307333878533"
+			yborderid: ""
 		}
 	}
 });
+```
+
+
+<a name="withdraw" />
+
+处理用户提现接口
+
+```js
+payInstance.withdraw({
+	'requestid':'',
+	'identityid':'',
+	'cardno':'',
+	'amount':100,
+	'userip':'0.0.144.241',
+	'ua':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36'
+},function(err,body){
+	if(err){
+		res.send(err);
+	}else{
+		var parseData = payInstance.parseCommon(body.data,body.encryptkey);
+	}
+})
+```
+
+<a name="drawRecord" />
+
+用户提现接口查询
+
+```js
+payInstance.drawRecord({
+	requestid:'',
+	ybdrawflowid:''
+},function(err,body){
+	if(err){
+		res.send(err);
+	}else{
+		var parseData = payInstance.parseCommon(body.data,body.encryptkey);
+		res.json(200,parseData);
+	}
+})
 ```
 
 <a name="authBind" />
@@ -161,7 +213,7 @@ payInstance.bankcardCheck('6227003300000000000',function(err,body){
 	// 	data: {
 	// 		bankcode: "CCB",
 	// 		bankname: "建设银行",
-	// 		cardno: "6227003320240037533",
+	// 		cardno: "6227003300000000000",
 	// 		cardtype: 1,//1:储蓄卡,2:信用卡,-1 未知银行卡
 	// 		isvalid: 1,//0:无效卡号,1:有效的银行卡号
 	// 		merchantaccount: "***"
@@ -169,4 +221,73 @@ payInstance.bankcardCheck('6227003300000000000',function(err,body){
 	// }
 	res.json(200,parseData);
 })
+```
+
+<a name="invokebindbankcard" />
+
+绑卡请求接口
+
+```js
+payInstance.invokebindbankcard({
+	'identityid':"",
+	'userip':'0.0.144.241',
+	'requestid':'',
+	'cardno':'',
+	'idcardtype':'01',
+	'idcardno':'',
+	'username':'',
+	'phone':''
+	},function(err,body){
+		var parseData = payInstance.parseCommon(body.data,body.encryptkey);
+		console.log(parseData)
+	}
+)
+```
+
+<a name="confirmbindbankcard" />
+
+确定绑卡接口
+
+```js
+payInstance.confirmbindbankcard({
+	'requestid':'',
+	'validatecode':'',
+	},function(err,body){
+	var parseData = payInstance.parseCommon(body.data,body.encryptkey);
+	console.log(parseData);
+})
+```
+
+<a name="unbindbankcard" />
+
+解绑卡接口
+
+```js
+payInstance.unbindbankcard({
+	'identityid':"",
+	'bindid':''
+},function(err,body){
+	if(err){
+		res.send(err);
+	}else{
+		var parseData = payInstance.parseCommon(body.data,body.encryptkey);
+		console.log(parseData)
+	}
+})
+```
+
+<a name="drawvalidamount" />
+
+可提现余额接口
+
+```js
+payInstance.drawvalidamount(
+	function(err,body){
+	if(err){
+		console.log(err);
+	}else{
+		var parseData = payInstance.parseNotAuthSign(body.data,body.encryptkey);
+		console.log(JSON.stringify(parseData));
+	}
+});
 ```
