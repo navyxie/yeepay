@@ -6,6 +6,10 @@
 
 [queryOrder](#queryOrder)
 
+[paySuccess](#paySuccess)
+
+[getStopNotifyData](#getStopNotifyData)
+
 [withdraw](#withdraw)
 
 [drawRecord](#drawRecord)
@@ -120,6 +124,48 @@ payInstance.queryOrder({
 });
 ```
 
+<a name="paySuccess" />
+
+异步或者同步回调进行数据解析的函数，判断是否支付成功
+
+```js
+payInstance.paySuccess({
+	data:"2WDFjaiSBQUMVAAyI%2F3WceeXYep%2F5jjZkGVjokcWHmlNE%2BTj7PYj7CbFG08sISGle%2Bdjt57gxlJNInMi12BcgdUp8t7GRZGtuJX%2F4lJNRdmAQFwDGjD9CQl%2FxM1VYpdig%2FEloRArbvmlI8EQ%2BrJp5uMnRbUykcZx8uZY9eNKs0GWvUMUEk0nJ7ivpcJdjZ0lveFTr4hj7nn7%2BRaHhNPpvGilJIjz%2F4%2BpRMaH8osApF%2FpcFEx2QwuSriBFaQp5v9mJ11MQVOWTiZZU6j0%2FTimXpHNnXC0qfvtrWSC5%2BVZ82B%2BIyHnlRNkc6JsR8EsESkjMe0S58ikcxmYnv7EBuf0IXOz2wai8DPeZYnC4c43hzWi5rxLsAQTvtK%2BEAKy6bZtl%2FtTEVNYxKP82PeWix2bax7z%2FqCHw8J0UJ40JvYqrW6tuEIIXoVkMDBAAq9umDS0I%2BTTe%2FEg4V%2FPUs%2FREYsdUS3tmelDty%2Fmstc7tgUXNUBHt5PPfBLeL9oJXUuQlAtB",
+	encryptkey:"JusH9eWW4KelVHLi77IHpj4vo4TgDnis2QVAmkDCqwYCSeQgjWGVgIfVvJDD61HodAMUdZf4ivvTbvadbyEkmysqzcUrzFCGR1lqC1ZhaakmgeYUefn8OPrykB4V4jSkbuQKnLBNAWvkTPG6nBQW5mohz48yqI8RcedCDnGjrv0%3D"
+},function(err,data){
+	if(!err && data.code === 0){
+		//已完成支付可执行订单更新或者发货了
+		//data
+		{ 
+			code: 0,
+			msg: 'ok',
+			data: 
+			{ 
+				amount: 1,//订单金额,以"分"为单位的整型
+				bank: '建设银行',//银行名称
+				bankcode: 'CCB',//银行缩写
+				cardtype: 1,//支付卡的类型,1 为借记卡,2 为信用卡
+				lastno: '',//支付的银行卡号
+				merchantaccount: '',//商户账户编号
+				orderid: '',//商户交易订单
+				status: 1,//0:待付,1:已付,2:已撤销,3:阻断交易
+				yborderid: ''//易宝流水号
+			} 
+		}
+	}
+});
+```
+
+<a name="getStopNotifyData" />
+
+获取终止异步回调的相应字符串
+
+**注：当向yeepay发送字符串时，代表商户已经成功处理回调，yeepay将终止异步回调。**
+
+```js
+//wap异步回调数据
+res.send(payInstance.getStopNotifyData());
+```
 
 <a name="withdraw" />
 
