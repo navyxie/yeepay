@@ -1,5 +1,10 @@
 # yeepay-易宝支付 SDK
 
+## 易宝支付回调
+> 异步回调是post请求，以字节流的方式回送数据。
+> 成功支付的同步回调是get请求，同时带有data和encryptkey参数。
+> 支付失败同步回调是get请求，不带有data和encryptkey参数。
+
 ## API
 
 [webPay](#webPay)
