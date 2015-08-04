@@ -68,18 +68,63 @@ app.get('/yp_finish',function(req,res){
 	var query = url_parts.query;
 	var encryptkey = query.encryptkey;	
 	var data = query.data;
-	var parseData = payInstance.parseReturn(data,encryptkey);
-	if(parseData.code == 0){
-		res.send('恭喜，成功购买考拉理财产品。<br />'+JSON.stringify(parseData));
-	}else{
-		res.send(parseData.msg);
-	}
+	payInstance.paySuccess({data:data,encryptkey:encryptkey},function(err,result){
+		if(!err && data.code === 0){
+			//同步处理成功
+			//data
+			{ 
+				code: 0,
+				msg: 'ok',
+				data: 
+				{ 
+					amount: 1,//订单金额,以"分"为单位的整型
+					bank: '建设银行',//银行名称
+					bankcode: 'CCB',//银行缩写
+					cardtype: 1,//支付卡的类型,1 为借记卡,2 为信用卡
+					lastno: '',//支付的银行卡号
+					merchantaccount: '',//商户账户编号
+					orderid: '',//商户交易订单
+					status: 1,//0:待付,1:已付,2:已撤销,3:阻断交易
+					yborderid: ''//易宝流水号
+				} 
+			}
+		}
+	});
 });
 // pay callback page async
+// 易宝异步回调处理
 app.post('/yp_callback',function(req,res){
-	//req.body->   code:0 is success.
-	console.log(req.body);
-	res.send('ok');
+	var body = '';
+	req.on('data',function(chunk){
+		//console.log(Buffer.isBuffer(chunk))
+		body += chunk
+	});
+	req.on('end',function(){
+		console.log(body);
+		//body的值:  data=2WDFjaiSBQUMVAAyI%2F3WceeXYep%2F5jjZkGVjokcWHmlNE%2BTj7PYj7CbFG08sISGle%2Bdjt57gxlJNInMi12BcgdUp8t7GRZGtuJX%2F4lJNRdmAQFwDGjD9CQl%2FxM1VYpdig%2FEloRArbvmlI8EQ%2BrJp5uMnRbUykcZx8uZY9eNKs0GWvUMUEk0nJ7ivpcJdjZ0lveFTr4hj7nn7%2BRaHhNPpvGilJIjz%2F4%2BpRMaH8osApF%2FpcFEx2QwuSriBFaQp5v9mJ11MQVOWTiZZU6j0%2FTimXpHNnXC0qfvtrWSC5%2BVZ82B%2BIyHnlRNkc6JsR8EsESkjMe0S58ikcxmYnv7EBuf0IXOz2wai8DPeZYnC4c43hzWi5rxLsAQTvtK%2BEAKy6bZtl%2FtTEVNYxKP82PeWix2bax7z%2FqCHw8J0UJ40JvYqrW6tuEIIXoVkMDBAAq9umDS0I%2BTTe%2FEg4V%2FPUs%2FREYsdUS3tmelDty%2Fmstc7tgUXNUBHt5PPfBLeL9oJXUuQlAtB&encryptkey=JusH9eWW4KelVHLi77IHpj4vo4TgDnis2QVAmkDCqwYCSeQgjWGVgIfVvJDD61HodAMUdZf4ivvTbvadbyEkmysqzcUrzFCGR1lqC1ZhaakmgeYUefn8OPrykB4V4jSkbuQKnLBNAWvkTPG6nBQW5mohz48yqI8RcedCDnGjrv0%3D
+		payInstance.paySuccess({data:data,encryptkey:encryptkey},function(err,data){
+			if(!err && data.code === 0){
+				//已完成支付可执行订单更新或者发货了
+				//data
+				{ 
+					code: 0,
+					msg: 'ok',
+					data: 
+					{ 
+						amount: 1,//订单金额,以"分"为单位的整型
+						bank: '建设银行',//银行名称
+						bankcode: 'CCB',//银行缩写
+						cardtype: 1,//支付卡的类型,1 为借记卡,2 为信用卡
+						lastno: '',//支付的银行卡号
+						merchantaccount: '',//商户账户编号
+						orderid: '',//商户交易订单
+						status: 1,//0:待付,1:已付,2:已撤销,3:阻断交易
+						yborderid: ''//易宝流水号
+					} 
+				}
+			}
+		});
+  	})
 });
 app.listen(port);
 console.log('app listen on '+port);
