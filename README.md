@@ -102,7 +102,7 @@ app.post('/yp_callback',function(req,res){
 	req.on('end',function(){
 		console.log(body);
 		//body的值:  data=2WDFjaiSBQUMVAAyI%2F3WceeXYep%2F5jjZkGVjokcWHmlNE%2BTj7PYj7CbFG08sISGle%2Bdjt57gxlJNInMi12BcgdUp8t7GRZGtuJX%2F4lJNRdmAQFwDGjD9CQl%2FxM1VYpdig%2FEloRArbvmlI8EQ%2BrJp5uMnRbUykcZx8uZY9eNKs0GWvUMUEk0nJ7ivpcJdjZ0lveFTr4hj7nn7%2BRaHhNPpvGilJIjz%2F4%2BpRMaH8osApF%2FpcFEx2QwuSriBFaQp5v9mJ11MQVOWTiZZU6j0%2FTimXpHNnXC0qfvtrWSC5%2BVZ82B%2BIyHnlRNkc6JsR8EsESkjMe0S58ikcxmYnv7EBuf0IXOz2wai8DPeZYnC4c43hzWi5rxLsAQTvtK%2BEAKy6bZtl%2FtTEVNYxKP82PeWix2bax7z%2FqCHw8J0UJ40JvYqrW6tuEIIXoVkMDBAAq9umDS0I%2BTTe%2FEg4V%2FPUs%2FREYsdUS3tmelDty%2Fmstc7tgUXNUBHt5PPfBLeL9oJXUuQlAtB&encryptkey=JusH9eWW4KelVHLi77IHpj4vo4TgDnis2QVAmkDCqwYCSeQgjWGVgIfVvJDD61HodAMUdZf4ivvTbvadbyEkmysqzcUrzFCGR1lqC1ZhaakmgeYUefn8OPrykB4V4jSkbuQKnLBNAWvkTPG6nBQW5mohz48yqI8RcedCDnGjrv0%3D
-		payInstance.paySuccess({data:data,encryptkey:encryptkey},function(err,data){
+		payInstance.paySuccess({data:body[0].split('=')[1],encryptkey:body[1].split('=')[1]},function(err,data){
 			if(!err && data.code === 0){
 				//已完成支付可执行订单更新或者发货了
 				//data
