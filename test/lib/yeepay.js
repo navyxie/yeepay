@@ -1,7 +1,8 @@
 var request = require('request');
 var yeepay = require('../../lib/yeepay');
+var payInstance = new yeepay();
+var should = require('should');
 describe('test yeepay pay',function(){
-	var payInstance = new yeepay();
 	var port = 8007;
 	var host = "http://192.168.1.120:"+port;
 	var testData = {
@@ -43,6 +44,35 @@ describe('test yeepay pay',function(){
 				}
 				return done();
 			})
+		})
+	});
+	describe('#parseReturn()',function(){
+		it('should not be ok!',function(){
+			payInstance.parseReturn('navytest','asdasdasd').code.should.not.be.equal(0);
+		});
+		it('should not be ok!',function(){
+			payInstance.parseReturn('','').code.should.not.be.equal(0);
+		})
+	});
+	describe('#parseCommon()',function(){
+		it('should not be ok!',function(){
+			payInstance.parseCommon('navytest','asdasdasd').code.should.not.be.equal(0);
+		});
+		it('should not be ok!',function(){
+			payInstance.parseCommon('','').code.should.not.be.equal(0);
+		})
+	});
+	describe('#verify()',function(){
+		it('should not be ok!',function(){
+			payInstance.verify('navytest','asdasdasd').should.be.equal(false);
+		})
+	});
+	describe('#paySuccess()',function(){
+		it('should not be ok!',function(done){
+			payInstance.paySuccess('navytest',function(err,data){
+				should.exist(err);
+				done();
+			});
 		})
 	})
 });

@@ -43,5 +43,20 @@ describe('test crypto api',function(){
 		it('RSAVerify return must be true',function(){
 			yeepayCrypto.RSAVerify(verifyData,sign,yeepayCrypto.getRSAPublicKey(config.yeepayPublicKey)).should.be.ok;		
 		});
+	});
+	describe('#enEAS()',function(){
+		it('should not be ok!',function(){
+			yeepayCrypto.enEAS('navytest','asdasdasd').should.be.not.ok();
+		})
+	});
+	describe('#deEAS()',function(){
+		it('should not be ok!',function(){
+			yeepayCrypto.deEAS('navytest','asdasdasd').should.be.not.ok();
+		})
+	});
+	describe('#decryptKey()',function(){
+		it('should not be ok!',function(){
+			yeepayCrypto.decryptKey('navytest','asdasdasd').should.be.not.ok();
+		})
 	})
 })
