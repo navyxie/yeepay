@@ -1,6 +1,6 @@
 {
   "name": "yeepay",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "yeepay 易宝支付 一键支付 投资通",
   "main": "index.js",
   "scripts": {
