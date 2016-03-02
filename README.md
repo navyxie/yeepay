@@ -389,3 +389,5 @@ payInstance.drawvalidamount(
 	}
 });
 ```
+
+**如果unbuntu下安装不成功yeepay模块，可以直接解压打包的模块**
